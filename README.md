@@ -27,3 +27,11 @@ Replace `debug` with `tsan` or `release` to select another configuration:
 | `debug`   | `build/debug`   | Debug with ASAN, and UBSAN |
 | `tsan`    | `build/tsan`    | Debug with TSAN            |
 | `release` | `build/release` | Optimized code             |
+
+## Analysis
+
+```sh
+cmake --preset release
+cmake --build --preset release --target format-check
+cmake --build --preset release --target tidy
+```

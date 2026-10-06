@@ -13,7 +13,8 @@ struct VectorRecord {
     std::vector<T> vector;
     Metadata metadata;
 
-    std::size_t dimension() const {
+    std::size_t dimension() const
+    {
         return vector.size();
     }
 };

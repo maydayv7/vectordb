@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Build and test (${{ matrix.preset }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        preset: [debug, tsan, release]
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
+      - name: Configure
+        run: nix-shell --run 'cmake --preset ${{ matrix.preset }}'
+
+      - name: Check formatting
+        if: matrix.preset == 'release'
+        run: nix-shell --run 'cmake --build --preset release --target format-check'
+
+      - name: Build
+        run: nix-shell --run 'cmake --build --preset ${{ matrix.preset }} --parallel 2'
+
+      - name: Test
+        run: nix-shell --run 'ctest --preset ${{ matrix.preset }}'
+
+      - name: Analyze
+        if: matrix.preset == 'release'
+        run: nix-shell --run 'cmake --build --preset release --target tidy'

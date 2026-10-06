@@ -4,5 +4,6 @@ pkgs.mkShell {
     cmake
     gcc
     gtest
+    llvmPackages_21.clang-tools
   ];
 }

@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.20)
 project(vectordb LANGUAGES CXX)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_library(vectordb INTERFACE)
 target_include_directories(vectordb INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include")
@@ -36,3 +37,5 @@ include(CTest)
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
+
+include(cmake/DevTools.cmake)
