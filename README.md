@@ -12,18 +12,18 @@ Grab all the dependencies with Nix:
 nix-shell
 ```
 
-## Debug
+## Build configurations
 
 ```sh
-cmake -S . -B build/debug -DCMAKE_BUILD_TYPE=Debug
-cmake --build build/debug
-./build/debug/record_example
+cmake --preset debug
+cmake --build --preset debug
+ctest --preset debug
 ```
 
-## Run tests
+Replace `debug` with `tsan` or `release` to select another configuration:
 
-After building:
-
-```sh
-ctest --test-dir build/debug --output-on-failure
-```
+| Preset    | Build directory | Purpose                    |
+| --------- | --------------- | -------------------------- |
+| `debug`   | `build/debug`   | Debug with ASAN, and UBSAN |
+| `tsan`    | `build/tsan`    | Debug with TSAN            |
+| `release` | `build/release` | Optimized code             |

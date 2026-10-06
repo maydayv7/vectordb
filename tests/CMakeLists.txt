@@ -5,4 +5,4 @@ target_link_libraries(vectordb_tests PRIVATE vectordb GTest::gtest_main)
 target_compile_options(vectordb_tests PRIVATE -Wall -Wextra -Wpedantic)
 
 include(GoogleTest)
-gtest_discover_tests(vectordb_tests)
+gtest_discover_tests(vectordb_tests DISCOVERY_MODE PRE_TEST)
