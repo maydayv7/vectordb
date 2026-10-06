@@ -11,3 +11,8 @@ target_compile_features(vectordb INTERFACE cxx_std_20)
 add_executable(record_example examples/record_example.cpp)
 target_link_libraries(record_example PRIVATE vectordb)
 target_compile_options(record_example PRIVATE -Wall -Wextra -Wpedantic)
+
+include(CTest)
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

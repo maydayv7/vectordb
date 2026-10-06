@@ -1,7 +1,8 @@
 {pkgs ? import <nixpkgs> {}}:
 pkgs.mkShell {
-  packages = [
-    pkgs.cmake
-    pkgs.gcc
+  packages = with pkgs; [
+    cmake
+    gcc
+    gtest
   ];
 }
