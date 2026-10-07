@@ -1,9 +1,12 @@
+#include "vectordb/flat_search.hpp"
+#include "vectordb/recall.hpp"
 #include "vectordb/vector_store_io.hpp"
 
 #include <cstddef>
 #include <cstdint>
 #include <exception>
 #include <filesystem>
+#include <iomanip>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -28,6 +31,37 @@ void check_float_vectors(
         }
     }
     std::cout << name << ": " << records.size() << " vectors, 128 dimensions\n";
+}
+
+void check_recall(
+    const std::vector<vectordb::VectorRecord<float>> &base,
+    const std::vector<vectordb::VectorRecord<float>> &queries,
+    const std::vector<vectordb::VectorRecord<std::int32_t>> &ground_truth,
+    std::size_t k)
+{
+    double total_recall = 0.0;
+    std::size_t perfect_queries = 0;
+    for (std::size_t i = 0; i < queries.size(); ++i) {
+        const auto ids = vectordb::flat_search(queries[i].vector, base, k);
+        const double recall =
+            vectordb::recall_at_k(ids, ground_truth[i].vector, k);
+        total_recall += recall;
+        if (recall == 1.0) {
+            ++perfect_queries;
+        } else {
+            std::cerr << "Query " << i << ": recall@" << k << " = " << recall
+                      << " (expected 1.0)\n";
+        }
+    }
+
+    std::cout << std::fixed << std::setprecision(6) << "Recall@" << k << ": "
+              << total_recall / static_cast<double>(queries.size()) << " ("
+              << perfect_queries << '/' << queries.size()
+              << " queries with perfect recall)\n";
+    if (perfect_queries != queries.size()) {
+        throw std::runtime_error("Recall@" + std::to_string(k) +
+                                 " must be 1.0 for every query");
+    }
 }
 
 } // namespace
@@ -74,8 +108,11 @@ int main(int argc, char **argv)
 
         std::cout << "Ground truth: " << ground_truth.size()
                   << " rows, 100 distinct neighbor IDs per query\n"
-                  << "All neighbor IDs are in [0, " << base.size() << ").\n"
-                  << "SIFT-small validation passed.\n";
+                  << "All neighbor IDs are in [0, " << base.size() << ").\n";
+
+        check_recall(base, queries, ground_truth, 10);
+        check_recall(base, queries, ground_truth, 100);
+        std::cout << "SIFT-small validation passed.\n";
     } catch (const std::exception &error) {
         std::cerr << "SIFT-small validation failed: " << error.what() << '\n';
         return 1;
