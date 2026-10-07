@@ -1,6 +1,7 @@
 find_package(GTest CONFIG REQUIRED)
 
 add_executable(vectordb_tests
+    distance_test.cpp
     vector_record_test.cpp
     vector_store_io_test.cpp
 )
