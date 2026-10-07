@@ -28,6 +28,12 @@ jobs:
       - name: Configure
         run: nix-shell --run 'cmake --preset ${{ matrix.preset }}'
 
+      - name: Prepare SIFT-small
+        if: matrix.preset == 'debug'
+        run: |
+          nix-shell --run 'cmake --build --preset debug --target fetch-siftsmall'
+          nix-shell --run 'cmake --preset debug -DVECTORDB_TEST_SIFTSMALL=ON'
+
       - name: Check formatting
         if: matrix.preset == 'release'
         run: nix-shell --run 'cmake --build --preset release --target format-check'

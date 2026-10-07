@@ -9,3 +9,10 @@ target_compile_options(vectordb_tests PRIVATE -Wall -Wextra -Wpedantic)
 
 include(GoogleTest)
 gtest_discover_tests(vectordb_tests DISCOVERY_MODE PRE_TEST)
+
+if(VECTORDB_TEST_SIFTSMALL)
+    add_test(NAME SiftSmallDataset
+        COMMAND validate_siftsmall "${PROJECT_SOURCE_DIR}/data/siftsmall"
+    )
+    set_tests_properties(SiftSmallDataset PROPERTIES LABELS integration)
+endif()
