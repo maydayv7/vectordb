@@ -4,7 +4,7 @@ A C++20 vector database.
 
 ## Build and run
 
-Requirements: Linux, CMake 3.20+, GCC 13+ or Clang 17+, and GoogleTest.
+Requirements: Linux, CMake 3.20+, GCC 13+ or Clang 17+, GoogleTest, and Google Benchmark.
 
 Grab all the dependencies with Nix:
 

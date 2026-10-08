@@ -50,4 +50,12 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
+option(VECTORDB_BUILD_BENCHMARKS "Build release benchmarks" OFF)
+if(VECTORDB_BUILD_BENCHMARKS)
+    if(NOT CMAKE_BUILD_TYPE STREQUAL "Release" OR NOT VECTORDB_SANITIZER STREQUAL "none")
+        message(FATAL_ERROR "Benchmarks require Release with VECTORDB_SANITIZER=none")
+    endif()
+    add_subdirectory(benchmarks)
+endif()
+
 include(cmake/DevTools.cmake)

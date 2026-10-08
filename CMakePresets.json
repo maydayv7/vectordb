@@ -39,7 +39,8 @@
       "displayName": "Optimized release",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
-        "VECTORDB_SANITIZER": "none"
+        "VECTORDB_SANITIZER": "none",
+        "VECTORDB_BUILD_BENCHMARKS": "ON"
       }
     }
   ],

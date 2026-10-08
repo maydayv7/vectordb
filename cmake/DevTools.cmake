@@ -2,6 +2,7 @@ file(GLOB_RECURSE VECTORDB_FORMAT_FILES CONFIGURE_DEPENDS
     "${PROJECT_SOURCE_DIR}/include/*.hpp"
     "${PROJECT_SOURCE_DIR}/src/*.cpp"
     "${PROJECT_SOURCE_DIR}/examples/*.cpp"
+    "${PROJECT_SOURCE_DIR}/benchmarks/*.cpp"
     "${PROJECT_SOURCE_DIR}/tests/*.cpp"
 )
 
@@ -25,6 +26,9 @@ if(CLANG_TIDY_EXECUTABLE)
     list(FILTER VECTORDB_ANALYSIS_FILES INCLUDE REGEX "\\.cpp$")
     if(NOT BUILD_TESTING)
         list(FILTER VECTORDB_ANALYSIS_FILES EXCLUDE REGEX "/tests/")
+    endif()
+    if(NOT VECTORDB_BUILD_BENCHMARKS)
+        list(FILTER VECTORDB_ANALYSIS_FILES EXCLUDE REGEX "/benchmarks/")
     endif()
 
     add_custom_target(tidy
